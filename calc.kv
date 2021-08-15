@@ -1,0 +1,272 @@
+<Btn1@Button>:
+    on_release: app.root.updateInput(self.text)
+    background_normal: ""
+    background_color: (42/255, 148/255, 244/255)
+    color: (0, 0, 0, 1)
+    font_size: root.size[1]*0.4
+
+
+<Btn2@Button>:
+    on_release: app.root.updateInput(self.text)
+    background_normal: ""
+    background_color: (0, 96/255, 166/255)
+    color: (0, 0, 0, 1)
+    font_size: root.size[1]*0.4
+
+<CalcLayout>:
+    id: main
+    canvas.before:
+        Color:
+            rgba: (1, 1, 1, 1)
+        Rectangle:
+            size: root.size
+    BoxLayout:
+        id: main_box
+        orientation: "horizontal"
+        size: root.size
+        spacing: 5
+        BoxLayout:
+            id: input_box
+            orientation: "vertical"
+            size_hint_x: 0.45
+
+            Label:
+                text: '[i][b]Métodos de Cálculo Numérico[/b][/i]'
+                markup: True
+                font_size: input_box.width/15
+                size_hint_x: 1
+                size_hint_y:0.1
+                pos_hint: {'center_x':0.5, 'top': 1}
+                color: (0, 96/255, 166/255)
+            BoxLayout:
+                id: selection_box
+                orientation: 'horizontal'
+                size_hint_y: 0.3
+                size_hint_x: 1
+                FloatLayout:
+                    id: method_box
+                    orientation: 'vertical'
+                    size_hint_x: 0.25
+                    Label:
+                        text: '[b]Selecione o método[/b]'
+                        markup: True
+                        font_size: selection_box.width/40
+                        size_hint_x: 1
+                        size_hint_y:0.2
+                        halign: 'left'
+                        pos_hint: {'top': 1, 'center_x':0.5}
+                        color: (0, 0, 0, 1)
+                    Spinner:
+                        id: spinner
+                        values: ('Bisseção', 'Aproximações \nSucessivas', 'Newton')
+                        text: 'Métodos'
+                        size_hint_y: 0.2
+                        pos_hint: {'top': 0.8, 'center_x':0.5}
+
+
+                BoxLayout:
+                    id: err_box
+                    orientation: 'vertical'
+                    size_hint_x: 0.2
+                    spacing: 2
+                    Label:
+                        text: '[b]Selecione o erro[/b]'
+                        markup: True
+                        font_size: selection_box.width/40
+                        size_hint_x: 1
+                        size_hint_y:0.2
+                        halign: 'left'
+                        pos_hint: {'top': 0.95, 'center_x':0.5}
+                        color: (0, 0, 0, 1)
+                    GridLayout:
+                        cols: 2
+
+                        CheckBox:
+                            id: abs_error
+                            group: 'erro'
+                            color: (0, 0, 0, 1)
+                        Label:
+                            text: 'Absoluto'
+                            color: (0, 0, 0, 1)
+                        CheckBox:
+                            id: rel_error
+                            group: 'erro'
+                            color: (0, 0, 0, 1)
+                        Label:
+                            text: 'Relativo'
+                            color: (0, 0, 0, 1)
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    id: method_params
+                    size_hint_x: 0.5
+                    spacing: 2
+                    Label:
+                        text: '[b]Especifique os parâmetros[/b]'
+                        markup: True
+                        font_size: selection_box.width/40
+                        size_hint_x: 1
+                        size_hint_y:0.2
+                        pos_hint: {'top': 1,'center_x':0.5}
+                        color: (0, 0, 0, 1)
+                    TextInput:
+                        id: lower_limit
+                        hint_text: 'Limite inferior do intervalo'
+                        size_hint_y: 0.2
+                        size_hint_x: 0.8
+                        pos_hint: {'center_x':0.5}
+                    TextInput:
+                        id: higher_limit
+                        hint_text: 'Limite superior do intervalo'
+                        size_hint_y: 0.2
+                        size_hint_x: 0.8
+                        pos_hint: {'center_x':0.5}
+
+                    TextInput:
+                        id: initial_value
+                        hint_text: 'Valor inicial de busca'
+                        size_hint_y: 0.2
+                        size_hint_x: 0.8
+                        pos_hint: {'center_x':0.5}
+
+                    TextInput:
+                        id: error
+                        hint_text: 'Erro percentual(0-1)'
+                        size_hint_y: 0.2
+                        size_hint_x: 0.8
+                        pos_hint: {'center_x':0.5}
+
+
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 0.10
+                spacing: 2
+                TextInput:
+                    id: input
+                    hint_text: 'Digite a equação no formato do método.'
+                    size_hint: (0.8, 1)
+                    font_size: self.width/20
+                    multiline: False
+                Btn1:
+                    text: 'RUN'
+                    size_hint_x: 0.2
+                    on_release:root.run(spinner.text,input.text, initial_value.text, lower_limit.text,higher_limit.text,error.text)
+
+
+            GridLayout:
+                id: calc_grid
+                cols: 6
+                spacing: 2
+                size_hint_y: 0.45
+                Btn2:
+                    text: "%"
+                Btn2:
+                    text: "CE"
+                    on_release: root.clearInput()
+                Btn2:
+                    text: "C"
+                    on_release: root.delete()
+                Btn2:
+                    text: "/"
+                Btn2:
+                    text: "sin"
+                Btn2:
+                    text: "cos"
+                Btn1:
+                    text: "7"
+                Btn1:
+                    text: "8"
+                Btn1:
+                    text: "9"
+                Btn2:
+                    text: "*"
+                Btn2:
+                    text: "tan"
+                Btn2:
+                    text: "√"
+                Btn1:
+                    text: "4"
+                Btn1:
+                    text: "5"
+                Btn1:
+                    text: "6"
+                Btn2:
+                    text: "-"
+                Btn2:
+                    text: "^"
+                Btn2:
+                    text: "log"
+                Btn1:
+                    text: "1"
+                Btn1:
+                    text: "2"
+                Btn1:
+                    text: "3"
+                Btn2:
+                    text: "+"
+                Btn2:
+                    text: "ln"
+                Btn2:
+                    text: "π"
+                Btn1:
+                    text: "x"
+                Btn1:
+                    text: "0"
+                Btn1:
+                    text: "."
+                Btn2:
+                    text: "e"
+                Btn2:
+                    text: "("
+                Btn2:
+                    text: ")"
+
+        BoxLayout:
+            id: info_box
+            orientation: 'vertical'
+            size_hint_x: 0.4
+            size_hint_y: 1
+
+            BoxLayout:
+                id: graph_box
+                orientation: 'vertical'
+                size_hint_y: 0.6
+
+                Label:
+                    text: '[i][b]Gráfico do Problema[/b][/i]'
+                    markup: True
+                    font_size: 20
+                    size_hint_x: 1
+                    size_hint_y:0.1
+                    pos_hint: {'center_x':0.5, 'top': 1}
+                    color: (0, 96/255, 166/255)
+
+                Image:
+                    id: plot
+                    source: ''
+                    allow_stretch: True
+
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: 0.4
+                size_hint_x: 1
+                id: container
+                Label:
+                    text: '[i][b]Histórico de Soluções[/b][/i]'
+                    markup: True
+                    font_size: 20
+                    size_hint_x: 1
+                    size_hint_y:0.1
+                    pos_hint: {'center_x':0.5, 'top': 1}
+                    color: (0, 96/255, 166/255)
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    GridLayout:
+                        id: result_box
+                        cols: 1
+                        size_hint_y: None
+                        height: 1500
+
