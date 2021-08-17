@@ -25,7 +25,9 @@ The following python libraries are used on the project:
 
 ## Examples :fireworks:
 
-TODO
+![image](https://user-images.githubusercontent.com/62614948/129728989-3c337e3b-97f4-4915-ab07-8c84dfddad58.png)
+![image](https://user-images.githubusercontent.com/62614948/129729079-7ab61347-ec9f-4905-8455-9baafb5d8f47.png)
+![image](https://user-images.githubusercontent.com/62614948/129729169-17230724-212d-49e5-ac8d-149cc659d530.png)
 
 ## Download :clipboard:
 Check the current release of the project. The release consists of a unique .exe file that runs on Windows
