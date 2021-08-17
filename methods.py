@@ -62,6 +62,8 @@ def Bissection(equation, a0, b0, x0, error_type, error_value):
         return Error.__str__(), None, None
     else:
         xsol = round(x1, precision)
+        params['x'] = x0
+        fx0 = evaluate(equation, **params)
         fx0 = round(fx0, precision)
         return f'x = {xsol}, com {iterations + 1} iterações e erro {error_type} menor que E = {error_value}', xsol, fx0
 
@@ -72,13 +74,19 @@ def Newton(equation, a0, b0, x0, error_type, error_value):
         error = 100
         iterations = 0
 
+        params['x'] = x0
+        fx0 = sympify(equation).evalf(subs={symbols('x'): x0, symbols('e'): E})
+        f_diff = diff(sympify(equation), symbols('x'))
+        fx0_diff = sympify(f_diff).evalf(subs={symbols('x'): x0, symbols('e'): E})
+
+        if fx0_diff == 0:
+            raise Exception("[METHOD ERROR] f'(x0) = 0")  # TODO
+
         while error > error_value:
             params['x'] = x0
             fx0 = sympify(equation).evalf(subs={symbols('x'):x0, symbols('e'): E})
             f_diff = diff(sympify(equation), symbols('x'))
             fx0_diff = sympify(f_diff).evalf(subs={symbols('x'):x0, symbols('e'): E})
-            if fx0_diff == 0:
-                raise Exception("[METHOD ERROR] f'(x0) = 0")  # TODO
 
             x1 = x0 - fx0/fx0_diff
 
@@ -95,6 +103,8 @@ def Newton(equation, a0, b0, x0, error_type, error_value):
         return Error.__str__(), None, None
     else:
         xsol = round(x1, precision)
+        params['x'] = x0
+        fx0 = sympify(equation).evalf(subs={symbols('x'): x0, symbols('e'): E})
         fx0 = round(fx0, precision)
         return f'x = {xsol}, com {iterations + 1} iterações e erro {error_type} menor que E = {error_value}', xsol, fx0
 
