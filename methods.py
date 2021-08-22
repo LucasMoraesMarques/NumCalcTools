@@ -81,7 +81,7 @@ def Newton(equation, a0, b0, x0, error_type, error_value):
         precision = len(str(error_value).split('.')[1]) + 3
         error = 100
         iterations = 0
-        x_values = [x0]
+        x_values = []
 
         params['x'] = x0
         fx0 = sympify(equation).evalf(subs={symbols('x'): x0, symbols('e'): E})
