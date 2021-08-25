@@ -58,10 +58,11 @@
                         color: (0, 0, 0, 1)
                     Spinner:
                         id: spinner
-                        values: ('Bisseção', 'Aproximações \nSucessivas', 'Newton')
+                        values: ('Bisseção', 'Aproximações \nSucessivas', 'Newton', "Newton's Polynomio", 'Polynomial Interpolation')
                         text: 'Métodos'
                         size_hint_y: 0.2
                         pos_hint: {'top': 0.8, 'center_x':0.5}
+                        on_text: root.updateDisplay(self.text)
 
 
                 BoxLayout:
@@ -70,6 +71,7 @@
                     size_hint_x: 0.2
                     spacing: 2
                     Label:
+                        id: error_header
                         text: '[b]Selecione o erro[/b]'
                         markup: True
                         font_size: selection_box.width/40
@@ -79,6 +81,7 @@
                         pos_hint: {'top': 0.95, 'center_x':0.5}
                         color: (0, 0, 0, 1)
                     GridLayout:
+                        id: grid_error
                         cols: 2
 
                         CheckBox:

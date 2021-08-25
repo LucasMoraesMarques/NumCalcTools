@@ -2,7 +2,7 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.config import Config
-from methods import Bissection, Newton, AproxSuc, evaluate
+from methods import Bissection, Newton, AproxSuc, evaluate, NewtonsPolynomio, PolynomioInterpolator
 import numpy as np
 import math
 import matplotlib.pyplot as plt
@@ -58,6 +58,36 @@ class CalcLayout(Widget):
                                                  error_type,
                                                  float(error)
                                                  )
+            elif method == "Newton's Polynomio":
+                x = [float(i) for i in lower_limit.split(',')]
+                y = [float(i) for i in higher_limit.split(',')]
+                result_text, polynomio, x, x0, y0 = NewtonsPolynomio(x, y, x0)
+                self.ids.result_box.add_widget(
+                    Label(text=result_text,
+                          color=(0, 1, 0, 1),
+                          font_size=15,
+                          size_hint=(1, None),
+                          height=40,
+                          pos_hint={'top': 1}
+                          ))
+                self.generatePlot(polynomio, polynomio, float(x0), float(y0), x[0], x[-1])
+                self.ids.plot.source = f'figure{self.figId}.png'
+                self.figId += 1
+            elif method == 'Polynomial Interpolation':
+                x = [float(i) for i in lower_limit.split(',')]
+                y = [float(i) for i in higher_limit.split(',')]
+                result_text, polynomio, x, x0, y0 = PolynomioInterpolator(x, y, x0)
+                self.ids.result_box.add_widget(
+                    Label(text=result_text,
+                          color=(0, 1, 0, 1),
+                          font_size=15,
+                          size_hint=(1, None),
+                          height=40,
+                          pos_hint={'top': 1}
+                          ))
+                self.generatePlot(polynomio, polynomio, float(x0), float(y0), x[0], x[-1])
+                self.ids.plot.source = f'figure{self.figId}.png'
+                self.figId += 1
 
         if xsol != None and ysol != None:
             self.generatePlot(equation, eqStr, xsol, ysol, lower_limit, higher_limit)
@@ -73,6 +103,8 @@ class CalcLayout(Widget):
                       pos_hint={'top': 1}
                       )
             )
+        elif method in ["Newton's Polynomio", 'Polynomial Interpolation']:
+            pass
         else:
             self.ids.result_box.add_widget(
                 Label(text=result_text,
@@ -95,6 +127,7 @@ class CalcLayout(Widget):
         return equation
 
     def generatePlot(self, equation, eqStr, xsol, ysol, lower_limit, higher_limit):
+        print(equation)
         lower_limit = float(lower_limit)
         higher_limit = float(higher_limit)
         step = abs(higher_limit-lower_limit)/100
@@ -112,7 +145,7 @@ class CalcLayout(Widget):
         plt.xlabel('X')
         plt.plot(x, y)
         plt.plot(xsol, ysol, marker='o', color='r')
-        plt.annotate(f'P({xsol}, {ysol})', xy=(xsol, ysol), xytext=(xsol-0.08, ysol-0.08), fontsize='x-large')
+        plt.annotate(f'P({xsol}, {ysol})', xy=(xsol, ysol), xytext=(xsol, ysol), fontsize='x-large')
 
         plt.savefig(f'figure{self.figId}.png')
         plt.clf()
@@ -138,6 +171,37 @@ class CalcLayout(Widget):
     def clearInput(self):
         self.ids.input.text = '0'
 
+    def updateDisplay(self, method):
+        if method in ["Newton's Polynomio", 'Polynomial Interpolation']:
+
+            self.ids.err_box.size_hint_x = None
+            self.ids.err_box.width = 0
+            self.ids.err_box.opacity = 0
+
+            self.ids.input.size_hint = None, None
+            self.ids.input.height = 0
+            self.ids.input.width = 0
+            self.ids.input.text = 'x+1'
+
+            self.ids.lower_limit.hint_text = 'Digite os valores de x separados por ,'
+            self.ids.higher_limit.hint_text = 'Digite os valores de y separados por ,'
+            self.ids.initial_value.hint_text = 'Digite o ponto para aproximação'
+            self.ids.error.size_hint_y = None
+            self.ids.error.height = 0
+            self.ids.error.text = '0.1'
+        else:
+            self.ids.err_box.size_hint_x = 0.2
+            self.ids.err_box.opacity = 1
+
+            self.ids.input.size_hint = (0.8, 1)
+            self.ids.input.text = ''
+
+            self.ids.lower_limit.hint_text = 'Limite inferior do intervalo'
+            self.ids.higher_limit.hint_text = 'Limite superior do intervalo'
+            self.ids.initial_value.hint_text = 'Valor inicial de busca'
+            self.ids.error.size_hint_y = 0.2
+            self.ids.error.text = ''
+            self.ids.error.hint_text = 'Erro percentual(0-1)'
 
 class CalcApp(App):
     icon = 'calculating.ico'

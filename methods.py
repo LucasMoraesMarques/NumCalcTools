@@ -1,12 +1,12 @@
 import math
 from sympy import *
-
-
+import numpy
 def evaluate(equation, **params):
     # Evaluate the equation
     try:
         value = eval(equation, params)
     except Exception as Error:
+        print(Error)
         raise SyntaxError
     else:
         return value
@@ -156,3 +156,63 @@ def AproxSuc(equation,a0, b0, x0, error_type, error_value):
                f'\n First x values: {list(map(lambda x: round(x, precision), values))}', xsol, fx1
 
 
+x = [1970, 1980, 1990, 2000]
+y = [3710, 4450, 5280, 6080]
+
+def NewtonsPolynomio(x, y, x0):
+    coeficients = [y[0]]
+    polynomio = ''
+    for i in range(0,len(x)-1):
+        lista = []
+        for j in range(1, len(y)):
+            lista.append((y[j]-y[j-1])/(x[j+i]-x[j-1]))
+            print(lista)
+        y = [round(i, 8) for i in lista]
+        coeficients.append(lista[0])
+    coeficients = [round(i, 8) for i in coeficients]
+
+    for i in range(len(x)):
+        if i == 0:
+            polynomio += f'{coeficients[i]}+'
+        else:
+            polynomio += f'{coeficients[i]}'
+        for value in x[:i]:
+            if value == 0:
+                polynomio += f'*(x)'
+            else:
+                polynomio += f'*(x+{-1*value})'
+        if i != len(x) - 1:
+            polynomio += '+'
+
+    while '+-' in polynomio:
+        polynomio = polynomio.replace('+-', '-')
+
+    while '++' in polynomio:
+        polynomio = polynomio.replace('++', '+')
+
+    print(polynomio)
+    y0 = sympify(polynomio).evalf(subs={symbols('x'): x0})
+
+    return f"Polynomio: {polynomio}\n" \
+           f"P({x0}) = {round(y0, 8)}", polynomio, x, x0, y0
+
+
+def PolynomioInterpolator(x, y, x0=0):
+    coeff_matrix = []
+    polynomio = ''
+    for i in range(len(x)):
+        coeff_matrix.append([x[i]**j for j in range(len(x))])
+    print(coeff_matrix)
+    sol = numpy.linalg.solve(coeff_matrix, y)
+    for i in range(len(x)):
+        polynomio += f'+{round(sol[i],8)}*x**{i}'
+    while '+-' in polynomio:
+        polynomio = polynomio.replace('+-', '-')
+
+    while '++' in polynomio:
+        polynomio = polynomio.replace('++', '+')
+    y0 = sympify(polynomio).evalf(subs={symbols('x'): x0})
+    return f"Polynomio: {polynomio}\n" \
+           f"P({x0}) = {round(y0, 8)}", polynomio, x, x0, y0
+
+print(NewtonsPolynomio(x, y, 1985))
