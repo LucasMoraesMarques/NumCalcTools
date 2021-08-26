@@ -156,9 +156,6 @@ def AproxSuc(equation,a0, b0, x0, error_type, error_value):
                f'\n First x values: {list(map(lambda x: round(x, precision), values))}', xsol, fx1
 
 
-x = [1970, 1980, 1990, 2000]
-y = [3710, 4450, 5280, 6080]
-
 def NewtonsPolynomio(x, y, x0):
     coeficients = [y[0]]
     polynomio = ''
@@ -197,7 +194,7 @@ def NewtonsPolynomio(x, y, x0):
            f"P({x0}) = {round(y0, 8)}", polynomio, x, x0, y0
 
 
-def PolynomioInterpolator(x, y, x0=0):
+def PolynomioInterpolator(x, y, x0):
     coeff_matrix = []
     polynomio = ''
     for i in range(len(x)):
@@ -215,4 +212,3 @@ def PolynomioInterpolator(x, y, x0=0):
     return f"Polynomio: {polynomio}\n" \
            f"P({x0}) = {round(y0, 8)}", polynomio, x, x0, y0
 
-print(NewtonsPolynomio(x, y, 1985))
