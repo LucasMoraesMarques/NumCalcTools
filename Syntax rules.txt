@@ -1,0 +1,6 @@
+1 - Para multiplicação use *. Para potência use ** ou ^.
+2 - Para raízes, utilize a notação de potência. Por exemplo (x)**0.5, que é a raiz quadrada de x.
+3 - No método das aproximações sucessivas escreva somente fi(x) e não x = fi(x). 
+4 - Use somente sin() e cos(), não use sen(). 
+5 - Use . em vez de , para números decimais. 
+6 - Não rode o programa sem fornecer todos os dados
